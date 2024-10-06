@@ -31,4 +31,7 @@ class ProductFactory(factory.Factory):
         model = Product
 
     id = factory.Sequence(lambda n: n)
-   ## Add code to create Fake Products 
+    #name = factory.Faker('word')  
+    description = factory.Faker('sentence')  
+    price = factory.Faker('random_number', digits=3) 
+    stock = factory.Faker('random_int', min=0, max=100)
