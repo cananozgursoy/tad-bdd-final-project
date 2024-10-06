@@ -31,7 +31,8 @@ class ProductFactory(factory.Factory):
         model = Product
 
     id = factory.Sequence(lambda n: n)
-    #name = factory.Faker('word')  
+    name = factory.Faker('word')  
     description = factory.Faker('sentence')  
-    price = factory.Faker('random_number', digits=3) 
-    stock = factory.Faker('random_int', min=0, max=100)
+    price = FuzzyDecimal(1.0, 100.0, 2)
+    available = factory.Faker('boolean')
+    category = FuzzyChoice([Category.CLOTHS, Category.ELECTRONICS, Category.FOOD])
