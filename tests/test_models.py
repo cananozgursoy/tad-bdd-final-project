@@ -102,5 +102,66 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(new_product.category, product.category)
 
     #
-    # ADD YOUR TEST CASES HERE
+  def test_list_all_products(self):
+        """It should list all products"""
+        product1 = ProductFactory()
+        product2 = ProductFactory()
+        product1.create()
+        product2.create()
+
+        products = Product.all()
+        self.assertEqual(len(products), 2)
+
+    def test_find_product_by_name(self):
+        """It should find a product by its name"""
+        product = ProductFactory(name="Unique Product")
+        product.create()
+
+        found_product = Product.find_by_name("Unique Product")
+        self.assertIsNotNone(found_product)
+        self.assertEqual(found_product.name, "Unique Product")
+
+    def test_find_product_by_category(self):
+        """It should find products by category"""
+        product1 = ProductFactory(category=Category.CLOTHS)
+        product2 = ProductFactory(category=Category.ELECTRONICS)
+        product1.create()
+        product2.create()
+
+        found_products = Product.find_by_category(Category.CLOTHS)
+        self.assertEqual(len(found_products), 1)
+        self.assertEqual(found_products[0].category, Category.CLOTHS)
+
+    def test_find_product_by_availability(self):
+        """It should find available products"""
+        product1 = ProductFactory(available=True)
+        product2 = ProductFactory(available=False)
+        product1.create()
+        product2.create()
+
+        available_products = Product.find_by_availability(True)
+        self.assertEqual(len(available_products), 1)
+        self.assertEqual(available_products[0].available, True)
+
+    def test_update_product(self):
+        """It should update a product"""
+        product = ProductFactory()
+        product.create()
+        original_name = product.name
+        product.name = "Updated Product"
+        product.update()
+
+        updated_product = Product.find_by_name("Updated Product")
+        self.assertIsNotNone(updated_product)
+        self.assertNotEqual(updated_product.name, original_name)
+
+    def test_delete_product(self):
+        """It should delete a product"""
+        product = ProductFactory()
+        product.create()
+        product_id = product.id
+
+        product.delete()
+        deleted_product = Product.find_by_id(product_id)
+        self.assertIsNone(deleted_product)
     #
